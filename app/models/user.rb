@@ -67,18 +67,21 @@ class User
       return usersList;
     end
 
-    #GET: A user by username/password match
+    #GET: A user by id
+    def self.find(id)
+      results = DB.exec_prepared("users_find", [id]);
+      return results.first;
+    end
+
+    #POST: Check for user by username/password match
     def self.authenticate(options)
+      puts "WHEE"
+      puts options
+      puts "WOAH"
       enteredUsername = options["username"];
       enteredPassword = options["password"];
       results = DB.exec_prepared("users_authenticate", [enteredUsername, enteredPassword]);
 
-      return results.first;
-    end
-
-    #GET: A user by id
-    def self.find(id)
-      results = DB.exec_prepared("users_find", [id]);
       return results.first;
     end
 
