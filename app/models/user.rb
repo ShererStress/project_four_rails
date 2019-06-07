@@ -1,6 +1,5 @@
 class User
 
-
   DB = PG.connect({
     :host => "localhost",
     :port => 5432,
@@ -16,7 +15,7 @@ class User
         FROM users
         WHERE users.id = $1;
       SQL
-    )
+    );
 
     #POST: A new user
     DB.prepare("users_create",
@@ -25,7 +24,7 @@ class User
         VALUES ($1, $2)
         RETURNING id, username, password;
       SQL
-    )
+    );
 
     #DELETE: An existing user
     DB.prepare("users_delete",
@@ -34,7 +33,17 @@ class User
         WHERE users.id = $1
         RETURNING id;
       SQL
-    )
+    );
+
+    #PUT: Edit an existing user
+    DB.prepare("users_update",
+      <<-SQL
+        UPDATE users
+        SET username = $2, password = $3
+        WHERE id = $1
+        RETURNING id, username, password;
+      SQL
+    );
 
     # Routes... in progress
 
@@ -56,7 +65,7 @@ class User
     end
 
     #POST: A new user
-    #Add encryption here?
+    #Add encryption here? (Don't forget the update route, too!)
     def self.create(options)
       newUsername = options["username"];
       newPassword = options["password"];
@@ -74,8 +83,14 @@ class User
 
 
     #PUT: Edit an existing user
-    def self.update()
+    #Add encryption here, as well!
+    def self.update(id, options)
+      newUsername = options["username"];
+      newPassword = options["password"];
 
+      results = DB.exec_prepared("users_update", [id, newUsername, newPassword]);
+
+      return results.first;
     end
 
 end #End user class
