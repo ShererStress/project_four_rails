@@ -8,6 +8,15 @@ class User
 
     #Prepared statements... in progress
 
+    #GET: A user by username/password match
+    DB.prepare("users_authenticate",
+      <<-SQL
+        SELECT *
+        FROM users
+        WHERE username = $1 AND password= $2;
+      SQL
+    );
+
     #GET: A user by id
     DB.prepare("users_find",
       <<-SQL
@@ -56,6 +65,15 @@ class User
       end
       puts usersList;
       return usersList;
+    end
+
+    #GET: A user by username/password match
+    def self.authenticate(options)
+      enteredUsername = options["username"];
+      enteredPassword = options["password"];
+      results = DB.exec_prepared("users_authenticate", [enteredUsername, enteredPassword]);
+
+      return results.first;
     end
 
     #GET: A user by id

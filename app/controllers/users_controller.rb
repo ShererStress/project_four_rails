@@ -4,7 +4,12 @@ class UsersController < ApplicationController
     render json: User.all
   end
 
-  #show route
+  # authenticate route
+  def authenticate
+    render json: User.authenticate(params["user"])
+  end
+
+  # show route
   def show
     render json: User.find(params["id"])
   end
