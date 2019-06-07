@@ -8,7 +8,7 @@ class User
     });
 
     #Prepared statements... in progress
-    DB.prepare("users_show_single",
+    DB.prepare("users_find",
       <<-SQL
         SELECT users.*
         FROM users
@@ -25,10 +25,14 @@ class User
       usersList = [];
       results.each do |result|
         usersList.push(result);
-
       end
       puts usersList;
       return usersList;
+    end
+
+    def self.find(id)
+      results = DB.exec_prepared("users_find", [id]);
+      return results.first;
     end
 
 
