@@ -6,8 +6,6 @@ class User
     :dbname => 'plane-rails_development'
     });
 
-    #Prepared statements... in progress
-
     #GET: A user by username/password match
     DB.prepare("users_authenticate",
       <<-SQL
@@ -54,7 +52,6 @@ class User
       SQL
     );
 
-    # Routes... in progress
 
     #GET: Index of users - returns array of user objects
     def self.all
@@ -75,9 +72,6 @@ class User
 
     #POST: Check for user by username/password match
     def self.authenticate(options)
-      puts "WHEE"
-      puts options
-      puts "WOAH"
       enteredUsername = options["username"];
       enteredPassword = options["password"];
       results = DB.exec_prepared("users_authenticate", [enteredUsername, enteredPassword]);
