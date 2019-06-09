@@ -1,7 +1,8 @@
 In-between# project_four_rails
 
-Database setup for: plane-rails_development
+Local database setup for: plane-rails_development
   table: users (id, username, password)
+  table: planes (id, icao_ID, linked_User_ID)
 
 In rails folder:
   $ rails db:create
@@ -11,8 +12,8 @@ In psql:
   $ INSERT INTO users (username, password) VALUES ('TestNameHere', 'GoodPass');
   $ SELECT * FROM users;
 
-  $ CREATE TABLE planes (id SERIAL, icaoID VARCHAR(16), linkedUserID SMALLINT);
-  $ INSERT INTO planes (icaoID, linkedUserID) VALUES ('aaa222', 1);
+  $ CREATE TABLE planes (id SERIAL, icao_ID VARCHAR(16), linked_User_ID SMALLINT);
+  $ INSERT INTO planes (icao_ID, linked_User_ID) VALUES ('aaa222', 1);
 
 # User Stories
 -MVP Requirements
