@@ -11,6 +11,9 @@ In psql:
   $ INSERT INTO users (username, password) VALUES ('TestNameHere', 'GoodPass');
   $ SELECT * FROM users;
 
+  $ CREATE TABLE planes (id SERIAL, icaoID VARCHAR(16), linkedUserID SMALLINT);
+  $ INSERT INTO planes (icaoID, linkedUserID) VALUES ('aaa222', 1);
+
 # User Stories
 -MVP Requirements
 A visitor to the site can:
