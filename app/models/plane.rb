@@ -1,21 +1,27 @@
 class Plane
 
-  DB = PG.connect({
-    :host => "localhost",
-    :port => 5432,
-    :dbname => 'plane-rails_development'
-    });
+  # DB = PG.connect({
+  #   :host => "localhost",
+  #   :port => 5432,
+  #   :dbname => 'plane-rails_development'
+  # });
 
+  if(ENV['DATABASE_URL'])
+    uri = URI.parse(ENV['DATABASE_URL'])
+    DB = PG.connect(uri.hostname, uri.port, nil, nil, uri.path[1..-1], uri.user, uri.password)
+  else
+    DB = PG.connect(host: "localhost", port: 5432, dbname: 'plane-rails_development')
+  end
 
-    #Prepared Statements
-    #GET: A plane by id
-    DB.prepare("planes_find",
-      <<-SQL
-        SELECT planes.*
-        FROM planes
-        WHERE planes.id = $1;
-      SQL
-    );
+  #Prepared Statements
+  #GET: A plane by id
+  DB.prepare("planes_find",
+    <<-SQL
+    SELECT planes.*
+    FROM planes
+    WHERE planes.id = $1;
+    SQL
+  );
 
     #Checks for an existing plane by icao_id and linked_user_id
     DB.prepare("planes_find_existing",
