@@ -6,6 +6,8 @@ class Plane
     :dbname => 'plane-rails_development'
     });
 
+
+    #Prepared Statements
     #GET: A plane by id
     DB.prepare("planes_find",
       <<-SQL
@@ -42,8 +44,9 @@ class Plane
       SQL
     );
 
+    #Route methods
 
-    #GET: Index of users - returns array of plane objects
+    #GET: Index of users - returns array of plane objects with all columns
     def self.all
       results = DB.exec("SELECT * FROM planes;");
       usersList = [];
@@ -54,13 +57,14 @@ class Plane
       return usersList;
     end
 
-    #GET: A plane by id
+    #GET: A plane by id - returns all columns
     def self.find(id)
       results = DB.exec_prepared("planes_find", [id]);
       return results.first;
     end
 
-    #POST: A new plane
+    #POST: A new plane - returns all columns
+    #Only posts if that specific userID/planeICAO combination does not exist in the database
     def self.create(options)
       planeICAO = options["planeData"];
       userID = options["userData"];
@@ -74,11 +78,9 @@ class Plane
       else
         return nil;
       end
-
-
     end
 
-    #DELETE: An existing plane
+    #DELETE: An existing plane - returns id(serial) of deleted plane
     def self.delete(id)
       results = DB.exec_prepared("planes_delete", [id]);
       return results.first;

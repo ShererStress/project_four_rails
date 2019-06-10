@@ -1,30 +1,31 @@
 class UsersController < ApplicationController
-  # index route
+
+  # GET: index route
   def index
     render json: User.all
   end
 
-  # show route
+  # GET: show route
   def show
     render json: User.find(params["id"])
   end
 
-  # authenticate route
+  # POST: authenticate route
   def authenticate
     render json: User.authenticate(params["user"])
   end
 
-  # create route
+  # POST: create route
   def create
     render json: User.create(params["user"])
   end
 
-  # delete route
+  # DELETE: delete route
   def delete
     render json: User.delete(params["id"])
   end
 
-  # update route
+  # PUT: update route
   def update
     render json: User.update(params["id"], params["user"])
   end

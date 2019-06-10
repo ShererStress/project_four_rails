@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
+  # User routes
   get '/users', to: 'users#index'
   get '/users/:id', to: 'users#show'
   post "users/logIn", to: "users#authenticate"
@@ -8,6 +9,7 @@ Rails.application.routes.draw do
   delete '/users/:id', to: 'users#delete'
   put '/users/:id', to: 'users#update'
 
+  # Plane routes
   get '/planes', to: 'planes#index'
   get '/planes/:id', to: 'planes#show'
   post '/planes', to: 'planes#create'
