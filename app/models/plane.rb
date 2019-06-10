@@ -6,34 +6,41 @@ class Plane
     :dbname => 'plane-rails_development'
     });
 
-    # #GET: A plane by id
-    # DB.prepare("planes_find",
-    #   <<-SQL
-    #     SELECT planes.*
-    #     FROM planes
-    #     WHERE planes.id = $1;
-    #   SQL
-    # );
-    #
-    # #POST: A new user
-    # DB.prepare("planes_create",
-    #   <<-SQL
-    #     INSERT INTO planes (username, password)
-    #     VALUES ($1, $2)
-    #     RETURNING id, username, password;
-    #   SQL
-    # );
-    #
-    # #DELETE: An existing user
-    # DB.prepare("planes_delete",
-    #   <<-SQL
-    #     DELETE FROM planes
-    #     WHERE planes.id = $1
-    #     RETURNING id;
-    #   SQL
-    # );
+    #GET: A plane by id
+    DB.prepare("planes_find",
+      <<-SQL
+        SELECT planes.*
+        FROM planes
+        WHERE planes.id = $1;
+      SQL
+    );
 
+    #Checks for an existing plane by icao_id and linked_user_id
+    DB.prepare("planes_find_existing",
+      <<-SQL
+        SELECT planes.*
+        FROM planes
+        WHERE planes.icao_id = $1 AND  planes.linked_user_id = $2;
+      SQL
+    );
 
+    #POST: A new plane
+    DB.prepare("planes_create",
+      <<-SQL
+        INSERT INTO planes (icao_id, linked_user_id)
+        VALUES ($1, $2)
+        RETURNING id, icao_id, linked_user_id;
+      SQL
+    );
+
+    #DELETE: An existing plane by id
+    DB.prepare("planes_delete",
+      <<-SQL
+        DELETE FROM planes
+        WHERE planes.id = $1
+        RETURNING id;
+      SQL
+    );
 
 
     #GET: Index of users - returns array of plane objects
@@ -46,28 +53,35 @@ class Plane
       puts usersList;
       return usersList;
     end
-    #
-    # #GET: A plane by id
-    # def self.find(id)
-    #   results = DB.exec_prepared("users_find", [id]);
-    #   return results.first;
-    # end
-    #
-    # #POST: A new plane
-    # #Add encryption here? (Don't forget the update route, too!)
-    # def self.create(options)
-    #   newUsername = options["username"];
-    #   newPassword = options["password"];
-    #
-    #   result = DB.exec_prepared("users_create", [newUsername, newPassword]);
-    #
-    #   return result.first
-    # end
-    #
-    # #DELETE: An existing plane
-    # def self.delete(id)
-    #   results = DB.exec_prepared("users_delete", [id]);
-    #   return results.first;
-    # end
+
+    #GET: A plane by id
+    def self.find(id)
+      results = DB.exec_prepared("planes_find", [id]);
+      return results.first;
+    end
+
+    #POST: A new plane
+    def self.create(options)
+      planeICAO = options["planeData"];
+      userID = options["userData"];
+
+      doesExist = false;
+      planeCheck = DB.exec_prepared("planes_find_existing", [planeICAO,userID]);
+      puts planeCheck.first;
+      if(planeCheck.first === nil)
+        result = DB.exec_prepared("planes_create", [planeICAO, userID]);
+        return result.first;
+      else
+        return nil;
+      end
+
+
+    end
+
+    #DELETE: An existing plane
+    def self.delete(id)
+      results = DB.exec_prepared("planes_delete", [id]);
+      return results.first;
+    end
 
 end #End plane class

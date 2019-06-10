@@ -18,8 +18,9 @@ class User
     #GET: A user by id
     DB.prepare("users_find",
       <<-SQL
-        SELECT users.*
-        FROM users
+        SELECT users.id AS id, users.username, planes.id AS plane_database_id, planes.icao_id
+        FROM users JOIN planes
+        ON users.id = planes.linked_user_id
         WHERE users.id = $1;
       SQL
     );
@@ -67,7 +68,7 @@ class User
     #GET: A user by id
     def self.find(id)
       results = DB.exec_prepared("users_find", [id]);
-      return results.first;
+      return results;
     end
 
     #POST: Check for user by username/password match

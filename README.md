@@ -19,7 +19,7 @@ In psql:
 -MVP Requirements
 A visitor to the site can:
 -Create a new user account
--log in with an existign user account
+-log in with an existing user account
 -Edit and delete that user account
 
 -Stretch
