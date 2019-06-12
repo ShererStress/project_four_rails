@@ -1,5 +1,9 @@
 In-between# project_four_rails
 
+Collaborators:
+Owen Orrison
+https://github.com/OwenOrrison
+
 See front-end readme for complete project description:
 Front-end: https://github.com/OwenOrrison/plane-react
 Active site: https://whispering-mesa-41107.herokuapp.com/
